@@ -1,8 +1,8 @@
 use macroquad::prelude::*;
 use std::io;
-use std::thread;
+use std::time::Duration;
 
-const CELL_SIZE: f32 = 4.0;
+const CELL_SIZE: f32 = 10.0;
 
 #[derive(Copy, Clone, PartialEq)]
 enum Cell {
@@ -35,7 +35,6 @@ async fn main() -> io::Result<()> {
 fn mouse_drop(grid: &mut Vec<Vec<Cell>>, grid_width: &usize, grid_height: &usize) {
     if is_mouse_button_down(MouseButton::Left) {
         let (mx, my) = mouse_position();
-        println!("{} {}", mx, my);
 
         let gx = (mx / CELL_SIZE) as usize;
         let gy = (my / CELL_SIZE) as usize;
@@ -47,7 +46,7 @@ fn mouse_drop(grid: &mut Vec<Vec<Cell>>, grid_width: &usize, grid_height: &usize
 }
 fn physics(grid: &mut Vec<Vec<Cell>>, grid_width: &usize, grid_height: &usize) {
     for y in (0..*grid_height - 1).rev() {
-        for x in 0..*grid_width - 1 {
+        for x in 0..*grid_width {
             if grid[y][x] == Cell::Sand {
                 if grid[y + 1][x] == Cell::Empty {
                     grid[y + 1][x] = Cell::Sand;
@@ -64,6 +63,7 @@ fn physics(grid: &mut Vec<Vec<Cell>>, grid_width: &usize, grid_height: &usize) {
     }
 }
 fn render(grid: &Vec<Vec<Cell>>, grid_width: &usize, grid_height: &usize) {
+    let mut colour: Color = YELLOW;
     for y in 0..*grid_height {
         for x in 0..*grid_width {
             if grid[y][x] == Cell::Sand {
@@ -72,7 +72,7 @@ fn render(grid: &Vec<Vec<Cell>>, grid_width: &usize, grid_height: &usize) {
                     y as f32 * CELL_SIZE,
                     CELL_SIZE,
                     CELL_SIZE,
-                    YELLOW,
+                    colour,
                 );
             }
         }
