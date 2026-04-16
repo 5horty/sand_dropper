@@ -12,6 +12,7 @@ enum Cell {
 
 #[macroquad::main("sand_dropper")]
 async fn main() -> io::Result<()> {
+    println!("testing token");
     let mut grid_width = (screen_width() / CELL_SIZE) as usize;
     let mut grid_height = (screen_height() / CELL_SIZE) as usize;
     let mut grid = vec![vec![Cell::Empty; grid_width]; grid_height];
